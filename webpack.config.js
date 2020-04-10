@@ -5,7 +5,8 @@ module.exports = {
     entry : './app/index.js',
     output : {
         path : path.resolve(__dirname , 'dist'),
-        filename: 'bundle.js'
+        filename: 'index_bundle.js',
+        publicPath: '/',
     },
     module : {
         rules : [
@@ -18,6 +19,19 @@ module.exports = {
         new HtmlWebpackPlugin ({
             template : 'app/index.html'
         })
-    ]
-
+    ],
+    devServer: {
+      historyApiFallback: true,
+    },
+    optimization: {
+        splitChunks: {
+          cacheGroups: {
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+            },
+          },
+        },
+      }
 }
