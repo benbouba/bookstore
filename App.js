@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import Routes from './app/Routes'
 
+
 export const history = createBrowserHistory()
 
 // only use the compose enhancer if available

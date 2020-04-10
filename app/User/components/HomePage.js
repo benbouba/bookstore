@@ -1,4 +1,6 @@
 import React from 'react'
+import Button from '@material-ui/core/Button'
+
 import {sayHello} from '../redux/userActions'
 
 import { connect } from 'react-redux'
@@ -8,7 +10,10 @@ class HomePage extends React.Component {
     render() {
         return(
             <div>
-                <h1>Home</h1>
+                <Button variant="contained" color="primary">
+      Hello World
+    </Button>
+
             </div>
         )
     }
