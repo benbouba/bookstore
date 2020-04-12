@@ -1,19 +1,22 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 
-import {sayHello} from '../redux/userActions'
+import {getAllBooks} from '../../store/catalogActions'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-
+import BooksListing from './BooksListings'
 class HomePage extends React.Component {
+  constructor(props){
+    super(props)
+    if(props.catalog.books.length === 0){
+      props.getAllBooks()
+    }
+  }
     render() {
         return(
             <div>
-                <Button variant="contained" color="primary">
-      Hello World
-    </Button>
-
+                <BooksListing books={this.props.catalog.books}/>
             </div>
         )
     }
@@ -21,14 +24,14 @@ class HomePage extends React.Component {
 
 // ==================================================================================================
 const mapStateToProps = state => ({
-   admin: state.admin
+   catalog: state.catalog
   })
   
   // ==================================================================================================
   function mapDispatchToProps (dispatch) {
     return {
       ...bindActionCreators({
-        sayHello
+        getAllBooks
       }, dispatch),
       dispatch
     }

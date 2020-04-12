@@ -1,19 +1,18 @@
-import {USER_SAYS_HELLO, LOGIN_USER} from './userActions'
+import {GET_ALL_BOOKS, ADD_BOOKS_TO_STORAGE} from './catalogActions'
 
 const initialState = () => ({
-  currentUserData: null,
+  books: [],
   
 })
 
 const REDUCER_ACTIONS = {
-  [USER_SAYS_HELLO]: (state, message) => {
-    state.message = message
+  [GET_ALL_BOOKS]: (state, books) => {
+    state.books = books
   },
-  [LOGIN_USER]: (state, currentUser)=>{
-    state.currentUserData = currentUser
-  }
+  [ADD_BOOKS_TO_STORAGE]: (state, books)=>{
+      state.books = books
+  }  
 }
-
 export default function (state = initialState(), action) {
   state = { ...state }
   const handler = REDUCER_ACTIONS[action.type]

@@ -13,7 +13,7 @@ export const history = createBrowserHistory()
 const composeEnhancer = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ trace: true }))
   || compose
 
-const store = createStore(createRootReducer(history), composeEnhancer(applyMiddleware(thunk)))
+export const store = createStore(createRootReducer(history), composeEnhancer(applyMiddleware(thunk)))
 
 export default class App extends React.Component{
     render(){
