@@ -5,6 +5,7 @@ import {getAllBooks} from '../../store/catalogActions'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import {withRouter} from 'react-router-dom'
 import BooksListing from './BooksListings'
 class HomePage extends React.Component {
   constructor(props){
@@ -13,10 +14,35 @@ class HomePage extends React.Component {
       props.getAllBooks()
     }
   }
+  renderButtons(){
+    if(this.props.history.location.pathname.includes('admin')){
+      return(
+        <React.Fragment>
+          <Button size="small" color="primary">
+                      View
+                    </Button>
+                    <Button size="small" color="primary">
+                      Edit
+                    </Button>
+                    <Button size="small" color="primary">
+                      Remove Book
+                    </Button>
+        </React.Fragment>
+      )
+    }
+    return(
+      <React.Fragment>
+          <Button size="small" color="primary">View</Button>
+          <Button size="small" color="primary">Add to cart</Button>
+      </React.Fragment>
+    )
+  }
     render() {
         return(
             <div>
-                <BooksListing books={this.props.catalog.books}/>
+                <BooksListing books={this.props.catalog.books}>
+                  {this.renderButtons()}
+                </BooksListing>
             </div>
         )
     }
@@ -24,7 +50,8 @@ class HomePage extends React.Component {
 
 // ==================================================================================================
 const mapStateToProps = state => ({
-   catalog: state.catalog
+   catalog: state.catalog,
+   user: state.user
   })
   
   // ==================================================================================================
@@ -37,5 +64,5 @@ const mapStateToProps = state => ({
     }
   }
   
-  export default connect(mapStateToProps, mapDispatchToProps)(HomePage)
+  export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HomePage))
   

@@ -24,7 +24,6 @@ class LoginPageWrapper extends React.Component {
   }
   login=async (event)=>{
     event.preventDefault()
-    console.log(this.props.user)
     const {username, password} = event.target
     this.setState({loading: true})
     const user = await this.props.loginUser(username.value, password.value)

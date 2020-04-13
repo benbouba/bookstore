@@ -1,4 +1,4 @@
-const bookstoreUsers = {
+export const bookstoreUsers = {
     user001: {
         username: 'client001',
         password: 'client1',

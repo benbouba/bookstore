@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const LoginPage = (props)=> {
-  console.log(props)
   const classes = useStyles();
   return (
     <Grid container component="main" className={classes.root}>

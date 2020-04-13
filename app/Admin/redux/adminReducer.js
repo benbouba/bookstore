@@ -1,13 +1,14 @@
-import {ADMIN_SAYS_HELLO} from './adminActions'
+import {GET_ALL_USERS} from './adminActions'
 
 const initialState = () => ({
   message: '',
+  users: {}
   
 })
 
 const REDUCER_ACTIONS = {
-  [ADMIN_SAYS_HELLO]: (state, message) => {
-    state.message = message
+  [GET_ALL_USERS]: (state, users) => {
+    state.users = users
   }
 }
 

@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '100%', // 16:9
+    paddingTop: '100%', 
   },
   cardContent: {
     flexGrow: 1,
@@ -58,8 +58,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6),
   },
 }));
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function CatalogComponent(props) {
   const classes = useStyles();
@@ -97,18 +95,7 @@ export default function CatalogComponent(props) {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
-                    <Button size="small" color="primary">
-                      Edit
-                    </Button>
-                    <Button size="small" color="primary">
-                      Remove Book
-                    </Button>
-                    <Button size="small" color="primary">
-                      Add to cart
-                    </Button>
+                    {props.children}
                   </CardActions>
                 </Card>
               </Grid>
@@ -128,6 +115,6 @@ export default function CatalogComponent(props) {
       </footer>
       {/* End footer */}
     </React.Fragment>
-  );
+  )
 }
 
