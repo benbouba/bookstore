@@ -1,3 +1,5 @@
+import { AssessmentRounded } from "@material-ui/icons"
+
 export const bookstoreUsers = {
     user001: {
         username: 'client001',
@@ -24,23 +26,30 @@ export const bookstoreUsers = {
         userID: 'adminUser'
     }
 }
+//Assert function to test params
 const assert = (condition, message) => {
     // checking if the condition is false
     if (!condition) {
         alert(`Assertion Error: ${message}`)
     }
 }
-import {
-    store
-} from '../../App'
-export default function RestService(method, data = null, dataKey = null, userID) {
+/**
+ * Main function for performing mock REST API requests to local storage
+ * @param {one of ['GET', 'POST', 'PUT', 'DELETE']} method 
+ * @param {data to be saved} data 
+ * @param {key of the data } dataKey 
+ */
+export default function RestService(method, data = null, dataKey) {
     // transforming the method to uppercase to avoid errors
     method = method.toUpperCase()
 
-    //  Checking if a valid attribute is used.
+    //  Checking if valid attributes are used.
     assert(['GET', 'POST', 'PUT', 'DELETE'].includes(method), 'Invalid method for REST API request')
+    assert(dataKey && typeof(dataKey)=== 'string', `Invalid data key supplied for ${method}`)
+
     return new Promise(resolve => setTimeout(()=>{
         let responseData
+        //Check the appropriate method and perfome the request
         if (method === 'POST') {
             RestService.seedData(data, dataKey)
             responseData = data
@@ -69,9 +78,11 @@ export default function RestService(method, data = null, dataKey = null, userID)
         } else {
             resolve(null)
         }
-    }), 4000)
+    }), 1000)
 }
-
+/**
+ * Function for logging in or getting current user data
+ */
 RestService.getCurrentUser = (username = null, password = null) => {
     return new Promise(resolve => setTimeout(() => {
         let currentUser, users
@@ -95,7 +106,6 @@ RestService.getCurrentUser = (username = null, password = null) => {
             currentUser = filteredUsers[0]
             localStorage.setItem(`currentUser`, JSON.stringify(currentUser))
         } else {
-            
             const jsonResponse = localStorage.getItem('currentUser')
             currentUser = JSON.parse(jsonResponse)
         }
@@ -107,6 +117,9 @@ RestService.getCurrentUser = (username = null, password = null) => {
     }, 1000))
 
 }
+/**
+ * Function for saving data to local storage
+ */
 RestService.seedData = (data, key) => {
     setTimeout(() => {
         if (typeof (Storage) !== 'undefined') {

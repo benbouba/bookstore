@@ -1,11 +1,15 @@
 import React from 'react';
-import {Button, IconButton, Toolbar, AppBar, Typography} from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {Button, IconButton, Toolbar, AppBar, Typography, Badge} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import {withRouter} from 'react-router-dom'
+import {ShoppingCart, Menu} from '@material-ui/icons';
+
+//Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
+// Actions
 import {logoutUser, toggleDrawer} from '../User/redux/userActions'
-import {withRouter} from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -27,10 +31,31 @@ const useStyles = makeStyles((theme) => ({
   },
   
 }));
-
+/**
+ * Counter for shopping basket
+ * @param {*} orders 
+ * @param {all active orders or all books in actiove orders} flag 
+ */
+export const getBadgeCount=(orders, flag)=>{
+  let count = 0
+  if(Object.keys(orders).length > 0){
+    Object.values(orders).forEach(order=>{
+      if(order.orderStatus == 'open'){
+        if(flag === 'allBooks'){
+          order.books.forEach(book=>{
+            count+=book.quantity
+          })
+        }else{
+          count += 1
+        }
+      }
+    })
+  }
+  return count
+}
 function Header(props) {
   const classes = useStyles()
-  console.log(props)
+  const { container, client } = props;
   return (
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
@@ -41,11 +66,17 @@ function Header(props) {
             onClick={props.toggleDrawer}
             className={classes.menuButton}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             e-Bookstore
           </Typography>
+          <IconButton aria-label={"show 17 new notifications"} color="inherit" 
+            onClick={()=>props.history.push('/client/orders')}>
+              <Badge badgeContent={getBadgeCount(client.orders, 'orders')} color="error">
+              <ShoppingCart />
+              </Badge>
+            </IconButton>
           <Button color="inherit" onClick={async()=>{
           await props.logoutUser()
           props.history.push('/')
@@ -58,7 +89,8 @@ function Header(props) {
 // ==================================================================================================
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  client: state.client
 })
 
 // ==================================================================================================

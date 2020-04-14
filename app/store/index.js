@@ -5,7 +5,7 @@ import { connectRouter } from 'connected-react-router'
 import adminReducer from '../Admin/redux/adminReducer'
 import clientReducer from '../Client/redux/clientReducer'
 import userReducer from '../User/redux/userReducer'
-import catalogReducer from './catalogReducer'
+import catalogReducer from '../Catalog/redux/catalogReducer'
 
 const  appReducer =(history)=> combineReducers({
       router: connectRouter(history),

@@ -1,12 +1,22 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from './Drawer';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import {CssBaseline,} from '@material-ui/core'
+import {withRouter} from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles';
+
+//Action creaotrs
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {withRouter} from 'react-router-dom'
+
+
+//Actions
+import {logoutUser, toggleDrawer, getCurrentLoggedInUser} from '../User/redux/userActions'
+import {getOrders } from '../Client/redux/clientActions'
+import {getAllBooks} from '../Catalog/redux/catalogActions'
+
+//Custom components
 import Header from './Header'
-import {logoutUser, toggleDrawer} from '../User/redux/userActions'
+import Drawer from './Drawer';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MainAppLayout(props) {
   const classes = useStyles();
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -59,15 +70,20 @@ function MainAppLayout(props) {
 
 // ==================================================================================================
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  catalog: state.catalog
  })
  
  // ==================================================================================================
  function mapDispatchToProps (dispatch) {
+   
    return {
      ...bindActionCreators({
         logoutUser,
-        toggleDrawer
+        toggleDrawer,
+        getAllBooks,
+        getOrders,
+        getCurrentLoggedInUser
      }, dispatch),
      dispatch
    }

@@ -1,18 +1,13 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import {Home, Person,  ShoppingCart, LibraryBooks, People} from '@material-ui/icons';
+import {Divider, Drawer, List, Hidden, ListItem, ListItemIcon, ListItemText }from '@material-ui/core';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
+//Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import {Home, Person, ShoppingCart, LibraryBooks, People} from '@material-ui/icons';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+//Actions
 import {toggleDrawer} from '../User/redux/userActions'
 
 const drawerWidth = 240;
@@ -39,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
 const drawers = {
     client:[
         {
-          title: 'Home',
-          path: '/client/home',
+          title: 'Catalog',
+          path: '/client/catalog',
           icon: <Home />
         },
         {
@@ -67,35 +62,35 @@ const drawers = {
         },
         {
           title: 'Catalog',
-          path: '/admin/home',
+          path: '/admin/catalog',
           icon: <LibraryBooks />
         }
       ]
 }
-
+/**
+ * Drawer component for app
+ * @param {*} props 
+ */
 function ResponsiveDrawer(props) {
-  const { container } = props;
+  const { container, client } = props;
   const classes = useStyles();
   const theme = useTheme();
-console.log(props.history)
+
 const currentDrawerLinks = drawers[props.drawerType]
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {currentDrawerLinks.map((link, index) => (
-          <ListItem 
-            selected={props.history.location.pathname === link.path}
-            button key={index} onClick={()=> {
-              props.history.push(`${link.path}`)
-            }
-              }>
-            <ListItemIcon>{link.icon}</ListItemIcon>
-            <ListItemText primary={link.title} />
-          </ListItem>
-          
-        ))}
+        {currentDrawerLinks.map((link, index) =><ListItem 
+          selected={props.history.location.pathname === link.path}
+          button key={index} onClick={()=> {
+            props.history.push(`${link.path}`)
+          }
+            }>
+          <ListItemIcon>{link.icon}</ListItemIcon>
+          <ListItemText primary={link.title} />
+        </ListItem>)}
       </List>
       
     </div>
@@ -137,7 +132,8 @@ const currentDrawerLinks = drawers[props.drawerType]
 // ==================================================================================================
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    client: state.client
   })
   
   // ==================================================================================================

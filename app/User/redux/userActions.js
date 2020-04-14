@@ -1,4 +1,4 @@
-import RestService from '../../helpers/RestServices'
+import RestService from '../../RestServices'
 export const USER_SAYS_HELLO = 'user.USER_SAYS_HELLO'
 export const LOGIN_USER = 'LOGIN_USER'
 export const LOGOUT_USER = 'LOGOUT_USER'
@@ -20,7 +20,6 @@ export const loginUser =(username, password)=>async(dispatch)=>{
 }
 export const getCurrentLoggedInUser =()=> async(dispatch)=>{
     const currentUser = await RestService.getCurrentUser()
-    console.log(currentUser)
     if(currentUser){
         dispatch({
             type: LOGIN_USER,

@@ -1,14 +1,25 @@
 import React from 'react'
-import {sayHello} from '../redux/clientActions'
+import {withRouter} from 'react-router-dom'
 
+
+//Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-class OrdersListing extends React.Component {
+// Actions
+import {getAllBooks} from '../redux/catalogActions'
+
+//Custom components
+import BooksListing from './BooksListings'
+
+class CatalogListing extends React.Component {
+  constructor(props){
+    super(props)
+  }
     render() {
         return(
             <div>
-                <h1>Orders Listing</h1>
+                <BooksListing books={this.props.catalog.books} />
             </div>
         )
     }
@@ -16,18 +27,19 @@ class OrdersListing extends React.Component {
 
 // ==================================================================================================
 const mapStateToProps = state => ({
-   admin: state.admin
+   catalog: state.catalog,
+   user: state.user
   })
   
   // ==================================================================================================
   function mapDispatchToProps (dispatch) {
     return {
       ...bindActionCreators({
-        sayHello
+        getAllBooks
       }, dispatch),
       dispatch
     }
   }
   
-  export default connect(mapStateToProps, mapDispatchToProps)(OrdersListing)
+  export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CatalogListing))
   

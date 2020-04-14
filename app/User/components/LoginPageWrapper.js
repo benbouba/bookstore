@@ -1,10 +1,14 @@
 import React from 'react'
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import {getCurrentLoggedInUser, loginUser} from '../redux/userActions'
+import {Backdrop, CircularProgress} from '@material-ui/core';
 
+//Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
+//Actions
+import {getCurrentLoggedInUser, loginUser} from '../redux/userActions'
+
+//Custom componets
 import LoginForm from './LoginForm'
 
 class LoginPageWrapper extends React.Component {
@@ -12,6 +16,7 @@ class LoginPageWrapper extends React.Component {
     super(props)
     this.state={}
   }
+  //Check if there is a user login and log them in
   async componentWillMount (){
     await this.props.getCurrentLoggedInUser()
     if(this.props.user.currentUserData){
@@ -22,6 +27,7 @@ class LoginPageWrapper extends React.Component {
       }
     }
   }
+  //function to login user
   login=async (event)=>{
     event.preventDefault()
     const {username, password} = event.target

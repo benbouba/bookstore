@@ -1,4 +1,4 @@
-import RestService, {bookstoreUsers} from "../../helpers/RestServices"
+import RestService, {bookstoreUsers} from "../../RestServices"
 
 export const GET_ALL_USERS = 'GET_ALL_USERS'
 

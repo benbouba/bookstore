@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default function asyncComponent (importComponent, role = null) {
+export default function asyncComponent (importComponent) {
   class AsyncComponent extends Component {
     constructor (props) {
       super(props)
@@ -18,7 +18,7 @@ export default function asyncComponent (importComponent, role = null) {
       } catch (e) {
         console.error('AsyncComponent error', e)
         this.setState({
-          component: AccessDeniedComponent
+          component: <div><h1>Access denied</h1></div>
         })
       }
     }
@@ -28,6 +28,5 @@ export default function asyncComponent (importComponent, role = null) {
       return Component ? <Component {...this.props} /> : null
     }
   }
-
   return AsyncComponent
 }

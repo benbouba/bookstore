@@ -1,7 +1,21 @@
-import RestService from '../helpers/RestServices'
+import RestService from '../../RestServices'
+
+//Types
 export const GET_ALL_BOOKS = 'GET_ALL_BOOKS'
 export const ADD_BOOKS_TO_STORAGE = 'ADD_BOOKS_TO_STORAGE'
+export const SET_CURRENT_BOOK = 'SET_CURRENT_BOOK'
 
+/**
+ * Set currently selected book for display in modal
+ * @param {Id of the book} bookID 
+ */
+export const setCurrentBook = (bookID)=>({
+    type: SET_CURRENT_BOOK, 
+    payload: bookID
+})
+/**
+ * Load all books from local storage
+ */
 export const getAllBooks = () => async (dispatch) => {
     let booksInStorage = await RestService('GET', {}, 'bookstore-catalog')
     if (!booksInStorage) {
@@ -11,9 +25,10 @@ export const getAllBooks = () => async (dispatch) => {
         type: ADD_BOOKS_TO_STORAGE,
         payload: booksInStorage
     })
-
-
 }
+
+
+//Books for seeding
 const books = [{
         bookID: 'book001',
         title: 'The Raven',
