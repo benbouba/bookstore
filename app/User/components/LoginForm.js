@@ -1,6 +1,11 @@
 import React from 'react'
-import {Avatar, Button, CssBaseline, TextField, FormControlLabel, Checkbox, Link, Paper, Box, Grid, LockOutlinedIcon, 
+import {Avatar, 
+  Button, CssBaseline, 
+  TextField, FormControlLabel, 
+  Checkbox, Link, Paper, 
+  Box, Grid, 
   Typography } from '@material-ui/core';
+import {LockOutlined} from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -60,7 +65,7 @@ const LoginPage = (props)=> {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in

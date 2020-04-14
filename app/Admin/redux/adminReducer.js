@@ -2,13 +2,15 @@ import {GET_ALL_USERS} from './adminActions'
 
 const initialState = () => ({
   message: '',
-  users: {}
+  users: {},
+  orders: []
   
 })
 
 const REDUCER_ACTIONS = {
-  [GET_ALL_USERS]: (state, users) => {
+  [GET_ALL_USERS]: (state, {users, orders}) => {
     state.users = users
+    state.orders = orders
   }
 }
 

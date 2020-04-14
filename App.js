@@ -14,7 +14,17 @@ const composeEnhancer = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window._
   || compose
 
 export const store = createStore(createRootReducer(history), composeEnhancer(applyMiddleware(thunk)))
-
+/**
+ * Lets us use asyncForEach inside the app
+ */
+Object.defineProperty(Array.prototype, 'asyncForEach', {
+    value (callback) {
+      if (typeof callback !== 'function') throw Error('callback must be a function for asyncForEach')
+      return Promise.all(this.map(callback))
+    },
+    configurable: true,
+    writable: true
+  })
 export default class App extends React.Component{
     render(){
         return(

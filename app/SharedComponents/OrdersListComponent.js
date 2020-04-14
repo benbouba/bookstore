@@ -59,7 +59,7 @@ renderEditableQuantity(book, order){
 
   isActive =(orderStatus)=> orderStatus === 'paid' || orderStatus === 'open'
   isEditable = (orderStatus)=>orderStatus === 'open'
-  isAdmin =()=> this.props.user.currentUserData.role && this.props.user.currentUserData.role === 'admin'
+  isAdmin =()=> this.props.user.currentUserData && this.props.user.currentUserData.role && this.props.user.currentUserData.role === 'admin'
     render() {
       //Passed as props from the component parent
       const orders = this.props.orders
