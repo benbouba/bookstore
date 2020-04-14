@@ -6,9 +6,6 @@ import UsersTable from './UsersTable'
 class UsersListing extends React.Component {
   constructor(props){
     super(props)
-    if(Object.keys(props.admin.users).length === 0){
-      props.getAllUsers()
-    }
   }
     render() {
         return(

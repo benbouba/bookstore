@@ -1,9 +1,9 @@
-import {GET_ALL_USERS} from './adminActions'
+import {GET_ALL_USERS, UPDATE_ORDER_STATUS} from './adminActions'
 
 const initialState = () => ({
   message: '',
   users: {},
-  orders: []
+  orders: {}
   
 })
 
@@ -11,6 +11,9 @@ const REDUCER_ACTIONS = {
   [GET_ALL_USERS]: (state, {users, orders}) => {
     state.users = users
     state.orders = orders
+  },
+  [UPDATE_ORDER_STATUS]: (state, {ownerID, orders})=>{
+    state.orders[ownerID].orders = orders
   }
 }
 
