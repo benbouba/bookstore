@@ -1,7 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 
-
 //Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'

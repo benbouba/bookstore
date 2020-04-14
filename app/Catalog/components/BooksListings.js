@@ -1,7 +1,8 @@
 import React from 'react';
-import {Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid} from '@material-ui/core'
+import { Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import { ShoppingCart} from '@material-ui/icons';
+import { ShoppingCart, Delete} from '@material-ui/icons';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 //Action creators
 import { connect } from 'react-redux'
@@ -10,12 +11,17 @@ import {withRouter} from 'react-router-dom'
 
 //Actions
 import { addBookToOrder } from '../../Client/redux/clientActions'
+import { removeBookFromCatalog} from '../../Catalog/redux/catalogActions'
 
 //Custom components
 import BookCard from './BookCard';
 import CustomModal from './BookCoverModal';
+import AddOrEditBookForm from './AddOrEditBookForm'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 300,
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -60,14 +66,15 @@ export const renderButtons=(book, props)=> {
               <Button size="small" color="primary">
                 Edit
               </Button>
-              <Button size="small" color="primary">
-                Remove Book
-              </Button>
+              <IconButton aria-label="add" 
+                onClick={async()=> props.removeBookFromCatalog(book.bookID)}>
+                <Delete />
+              </IconButton>
   </React.Fragment>
 ):(
 <React.Fragment>
     <Button size="small" color="primary" onClick={()=>props.history.push(`/client/catalog/${book.bookID}`)}>View</Button>
-    <IconButton aria-label="add" onClick={async()=> props.addBookToOrder(book.bookID, book.title, book.bookCover)}>
+        <IconButton aria-label="add" onClick={async()=> props.addBookToOrder(book.bookID, book.title, book.bookCover)}>
       <ShoppingCart />
     </IconButton>
 </React.Fragment>
@@ -77,18 +84,29 @@ function CatalogComponent(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false)
   const [currentBook, setCurrentBook] = React.useState(null)
+  const [openAddBookModal, setOpenAddBookModal] = React.useState(false)
 
   const handleOpen = (book) => {
     setCurrentBook(book)
     setOpen(true)
   };
-
   const handleClose = () => {
     setCurrentBook(null)
     setOpen(false);
   }
-  
-  return (
+  const handleOpenAddBookModal =()=>{
+    setOpenAddBookModal(true)
+  }
+  const handleCloseAddBookModal =()=>{
+    setOpenAddBookModal(false)
+  }
+  return props.catalog.fetchinCatalog ?(
+    <main className={classes.root}>
+      <Skeleton />
+      <Skeleton animation={false} />
+      <Skeleton animation="wave" />
+    </main>
+    ): (
     <React.Fragment>
       <CssBaseline />
       <main>
@@ -98,6 +116,7 @@ function CatalogComponent(props) {
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
               Catalog
             </Typography>
+            <Button variant="contained" color="primary" onClick={handleOpenAddBookModal}>Add New Book</Button>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
@@ -132,6 +151,9 @@ function CatalogComponent(props) {
       <CustomModal open={open} handleClose={handleClose}>
         <BookCard book={currentBook}/>
       </CustomModal>
+      <CustomModal open={openAddBookModal} handleClose={handleCloseAddBookModal}>
+        <AddOrEditBookForm />
+      </CustomModal>
     </React.Fragment>
   )
 }
@@ -144,7 +166,8 @@ const mapStateToProps = state => ({
  function mapDispatchToProps (dispatch) {
    return {
      ...bindActionCreators({
-      addBookToOrder
+      addBookToOrder,
+      removeBookFromCatalog
      }, dispatch),
      dispatch
    }
