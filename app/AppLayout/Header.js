@@ -55,7 +55,8 @@ export const getBadgeCount=(orders, flag)=>{
 }
 function Header(props) {
   const classes = useStyles()
-  const { container, client } = props;
+  const { user, client } = props;
+  const {currentUserData} = user
   return (
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
@@ -71,12 +72,13 @@ function Header(props) {
           <Typography variant="h6" className={classes.title}>
             e-Bookstore
           </Typography>
+          {(currentUserData && currentUserData.role && currentUserData.role !== 'admin') &&
           <IconButton aria-label={"show 17 new notifications"} color="inherit" 
             onClick={()=>props.history.push('/client/orders')}>
               <Badge badgeContent={getBadgeCount(client.orders, 'orders')} color="error">
               <ShoppingCart />
               </Badge>
-            </IconButton>
+            </IconButton>}
           <Button color="inherit" onClick={async()=>{
           await props.logoutUser()
           props.history.push('/')

@@ -22,7 +22,6 @@ const REDUCER_ACTIONS = {
     state.currentUserData = null
   },
   [TOGGLE_DRAWER]: (state) => {
-    console.log('Closing')
     state.drawerOpen = !state.drawerOpen
   }
 }

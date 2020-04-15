@@ -15,7 +15,7 @@ import { removeBookFromCatalog, toggleEditBookModal, toggleAddBookModal, toggleS
 
 //Custom components
 import BookCard from './BookCard';
-import CustomModal from './BookCoverModal';
+import CustomModal from '../../SharedComponents/CustomModal';
 import AddOrEditBookForm from './AddOrEditBookForm'
 import TitleComponent from '../../SharedComponents/TitleComponent';
 import LoadingComponent from '../../SharedComponents/LoadingComponent'
@@ -62,16 +62,16 @@ const useStyles = makeStyles((theme) => ({
 export const renderButtons=(book, props, showModalFunction)=> {
   return props.history.location.pathname.includes('admin') ? (
   <React.Fragment>
-    <Button size="small" color="primary">
-                View
-              </Button>
-              <Button size="small" color="primary" onClick={()=>showModalFunction(book)}>
-                Edit
-              </Button>
-              <IconButton aria-label="add" 
-                onClick={async()=> props.removeBookFromCatalog(book.bookID)}>
-                <Delete />
-              </IconButton>
+    <Button size="small" color="primary" onClick={()=>props.history.push(`/admin/catalog/${book.bookID}`)}>
+      View
+    </Button>
+    <Button size="small" color="primary" onClick={()=>showModalFunction(book)}>
+      Edit
+    </Button>
+    <IconButton aria-label="add" 
+      onClick={async()=> props.removeBookFromCatalog(book.bookID)}>
+      <Delete />
+    </IconButton>
   </React.Fragment>
 ):(
 <React.Fragment>

@@ -51,6 +51,11 @@ const drawers = {
       ],
       admin:[
         {
+          title: 'Catalog',
+          path: '/admin/catalog',
+          icon: <Home />
+        },
+        {
           title:'User',
           path: '/admin/users',
           icon: <People />
@@ -60,11 +65,6 @@ const drawers = {
           path: '/admin/orders',
           icon: <LibraryBooks />
         },
-        {
-          title: 'Catalog',
-          path: '/admin/catalog',
-          icon: <LibraryBooks />
-        }
       ]
 }
 /**

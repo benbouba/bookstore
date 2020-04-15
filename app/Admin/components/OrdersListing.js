@@ -17,7 +17,6 @@ class OrdersListing extends React.Component {
             <TitleComponent title={'Clients\' orders'} />
             {asArrayOrders.length > 0 && asArrayOrders.map((clientOrders, index)=>{
               const ordersArray = Object.values(clientOrders.orders)
-              console.log(clientOrders.owner)
               return(
                 <Container key={index}>
                   <Typography gutterBottom>
