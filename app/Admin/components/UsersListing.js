@@ -3,15 +3,20 @@ import {getAllUsers} from '../redux/adminActions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import UsersTable from './UsersTable'
+import TitleComponent from '../../SharedComponents/TitleComponent'
+import LoadingComponent from '../../SharedComponents/LoadingComponent'
+
 class UsersListing extends React.Component {
   constructor(props){
     super(props)
   }
     render() {
-        return(
+        return (
             <div>
-                <h1>Users Listing</h1>
-                <UsersTable users={Object.values(this.props.admin.users)}/>
+                <TitleComponent title='Bookstore User' />
+                {this.props.admin.fetchingAllUsers ? 
+                <LoadingComponent/>:
+                <UsersTable users={Object.values(this.props.admin.users)}/>}
             </div>
         )
     }
@@ -19,7 +24,8 @@ class UsersListing extends React.Component {
 
 // ==================================================================================================
 const mapStateToProps = state => ({
-   admin: state.admin
+   admin: state.admin,
+   user: state.user
   })
   
   // ==================================================================================================

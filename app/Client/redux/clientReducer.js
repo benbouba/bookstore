@@ -1,5 +1,4 @@
 import {
-  CLIENT_SAYS_HELLO,
   ADD_BOOK_TO_CART,
   PAY_ORDER,
   CANCEL_ORDER,
@@ -15,9 +14,6 @@ const initialState = () => ({
 })
 
 const REDUCER_ACTIONS = {
-  [CLIENT_SAYS_HELLO]: (state, message) => {
-    state.message = message
-  },
   [ADD_BOOK_TO_CART]: (state, orders) => {
     state.orders = orders
   },

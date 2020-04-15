@@ -9,7 +9,10 @@ export const REMOVE_BOOK = 'REMOVE_BOOK'
 export const UPDATE_BOOK_PROPERTY = 'UPDATE_BOOK_PROPERTY'
 export const ADD_NEW_BOOK = 'ADD_NEW_BOOK'
 export const FETCHING_CATALOG = 'FETCHING_CATALOG'
-
+export const TOGGLE_ADD_BOOK_MODAL = 'TOGGLE_ADD_BOOK_MODAL'
+export const TOGGLE_EDIT_BOOK_MODAL = 'TOGGLE_EDIT_BOOK_MODAL'
+export const ADDING_OR_EDITING_BOOK = 'ADDING_OR_EDITING_BOOK'
+export const SHOW_NOTIFICATION = 'SHOW_NOTIFICATION'
 export const defaultCover = 'https://bookstore-catalog.s3.amazonaws.com/cover.png'
 
 /** 
@@ -56,20 +59,35 @@ export const removeBookFromCatalog=(bookID)=>async(dispatch, getState)=>{
         payload: responseData
     })
 }
-export const editBookProperty=(bookID, propertyKey, value)=>async(dispatch, getState)=>{
+export const editBookProperty=(bookID, bookData)=>async(dispatch)=>{
+    dispatch({
+        type: ADDING_OR_EDITING_BOOK,
+        payload: true
+    })
     let booksInStorage = await RestService('GET', {}, 'bookstore-catalog')
     const currentBookIndex = booksInStorage.findIndex(book=> book.bookID === bookID)
     if(currentBookIndex > -1){
-        booksInStorage[currentBookIndex][propertyKey]= value
+        booksInStorage[currentBookIndex] = {
+            ...booksInStorage[currentBookIndex],
+            ...bookData,
+        }
     }
     const responseData = await RestService('POST', booksInStorage, 'catalog')
     dispatch({
         type: UPDATE_BOOK_PROPERTY,
         payload: responseData
     })
+    dispatch({
+        type: ADDING_OR_EDITING_BOOK,
+        payload: false
+    })
 }
 
 export const addBook=(bookData)=>async(dispatch)=>{
+    dispatch({
+        type: ADDING_OR_EDITING_BOOK,
+        payload: true
+    })
     let booksInStorage = await RestService('GET', {}, 'bookstore-catalog')
     const newBook = {
         ...bookData,
@@ -82,8 +100,30 @@ export const addBook=(bookData)=>async(dispatch)=>{
         type: ADD_NEW_BOOK,
         payload: responseData
     })
+    dispatch({
+        type: ADDING_OR_EDITING_BOOK,
+        payload: false
+    })
 }
+export const toggleEditBookModal =(value)=>({
+    type: TOGGLE_EDIT_BOOK_MODAL,
+    payload: value
+})
 
+export const toggleAddBookModal =(value)=>({
+    type: TOGGLE_ADD_BOOK_MODAL,
+    payload: value
+})
+
+/**
+ * Action for showing success notification
+ * could be added to other components too
+ * @param {*} value 
+ */
+export const toggleShowNotification =(value)=>({
+    type: SHOW_NOTIFICATION,
+    payload: value
+})
 //Books for seeding
 const books = [{
         bookID: 'book001',

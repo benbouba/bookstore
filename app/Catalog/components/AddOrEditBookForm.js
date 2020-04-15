@@ -1,17 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Snackbar, Typography, TextField, Button} from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Typography, TextField, Button, CircularProgress} from '@material-ui/core';
 
 //Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import {addBook} from '../redux/catalogActions'
+import {addBook, editBookProperty, toggleEditBookModal, toggleAddBookModal, toggleShowNotification} from '../redux/catalogActions'
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+
 class AddOrEditBookForm extends React.Component {
   
     constructor(props){
@@ -20,12 +17,16 @@ class AddOrEditBookForm extends React.Component {
             title: '',
             author: '',
             publicationDate: '',
-            quantity: '',
-            showNotification: false
+            quantity: 1,
         }
     }
-    handleCloseNotification(){
-      this.setState({showNotification: false})
+    componentDidMount(){
+      const {book} = this.props
+      if(book){
+        Object.keys(book).forEach(key=>{
+          this.setState({[key]: book[key]})
+        })
+      }
     }
     handleInputChange=(event)=> {
         event.preventDefault()
@@ -34,25 +35,35 @@ class AddOrEditBookForm extends React.Component {
             [name]: value
         })
         }
-    handleSubmit=async (event)=>{
+    handleSubmit=async(event)=>{
         event.preventDefault()
-        const {title, author, publicationDate, quantity} = this.state
-        const newBook = {title, author, publicationDate, quantity}
-        await this.props.addBook(newBook)
-        this.setState({showNotification: true})
-        event.target.reset()
+        event.persist()
+        const {title, author, publicationDate, quantity, bookID} = this.state
+        const newBookData = {title, author, publicationDate, quantity}
+        if(bookID){
+          await this.props.editBookProperty(bookID, newBookData)
+          this.props.toggleEditBookModal(false)
+        }else{
+          await this.props.addBook(newBookData)
+          this.props.toggleAddBookModal(false)
+        }
+        this.props.toggleShowNotification(true)
     }
   render(){
   return (
     <div>
         <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
-              New Book
+            {this.props.catalog.addingOrEditingBook && <CircularProgress />}
+        </Typography>
+        <Typography component="h5" variant="h5" align="center" color="textPrimary" gutterBottom>
+             {this.props.book? this.props.book.title: 'New Book'}
         </Typography>
       <form onSubmit={this.handleSubmit}>
         <TextField
           id="outlined-full-width"
           label="Title"
           name='title'
+          value={this.state.title}
           style={{ margin: 8 }}
           placeholder="The Raven"
           fullWidth
@@ -67,6 +78,7 @@ class AddOrEditBookForm extends React.Component {
           id="outlined-full-width"
           label="Author"
           name='author'
+          value={this.state.author}
           style={{ margin: 8 }}
           placeholder="Edgar Allan Poe"
           fullWidth
@@ -81,6 +93,7 @@ class AddOrEditBookForm extends React.Component {
           id="outlined-full-width"
           label="Publication date"
           name='publicationDate'
+          value={this.state.publicationDate}
           style={{ margin: 8 }}
           placeholder="January, 1 1970"
           fullWidth
@@ -95,18 +108,13 @@ class AddOrEditBookForm extends React.Component {
           label="Quantity"
           id="outlined-margin-none"
           name='quantity'
-          defaultValue={1}
+          value={this.state.quantity}
           variant="outlined"
           style={{ margin: 8 }}
           onChange={this.handleInputChange}
         />
         <Button size='large' fullWidth variant="contained" color="primary" type="submit">Save</Button>
       </form>
-      <Snackbar open={this.state.showNotification} autoHideDuration={4000} onClose={this.handleCloseNotification}>
-        <Alert onClose={this.handleCloseNotification} severity="success">
-          Book has been Added successfully!
-        </Alert>
-      </Snackbar>
     </div>
   );}
 }
@@ -121,6 +129,10 @@ const mapStateToProps = state => ({
      return {
        ...bindActionCreators({
         addBook,
+        editBookProperty,
+        toggleEditBookModal,
+        toggleAddBookModal,
+        toggleShowNotification
        }, dispatch),
        dispatch
      }

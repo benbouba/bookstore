@@ -21,9 +21,9 @@ class LoginPageWrapper extends React.Component {
     await this.props.getCurrentLoggedInUser()
     if(this.props.user.currentUserData){
       if (this.props.user.currentUserData.role === 'admin') {
-        this.props.history.push(`/admin/home`)
+        this.props.history.push(`/admin/catalog`)
       }else{
-        this.props.history.push(`/client/home`)
+        this.props.history.push(`/client/catalog`)
       }
     }
   }

@@ -5,7 +5,6 @@ import {BrowserRouter, Route, Switch } from 'react-router-dom'
 import ClientAppWrapper from './Client/ClientAppWrapper'
 import AdminAppWrapper from './Admin/AdminAppWrapper'
 import LoginPage from './User/components/LoginPageWrapper'
-import CatalogListing from './Catalog/components/CatalogListing'
 
 // Action creator
 import { connect } from 'react-redux'
@@ -43,9 +42,7 @@ class AppRoutes extends React.Component{
     return(
     <BrowserRouter >  
       <Switch>
-        <Route exact component={CatalogListing} path={`/home`}></Route>    
         <Route exact component={LoginPage} path={`/`}></Route>
- 
         <Route component={AdminAppWrapper} path={`/admin`} />
         <Route component={ClientAppWrapper} path={`/client`} />
         </Switch>

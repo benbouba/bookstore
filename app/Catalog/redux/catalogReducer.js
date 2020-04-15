@@ -5,12 +5,20 @@ import {
   REMOVE_BOOK,
   UPDATE_BOOK_PROPERTY,
   ADD_NEW_BOOK,
-  FETCHING_CATALOG
+  FETCHING_CATALOG,
+  TOGGLE_ADD_BOOK_MODAL,
+  TOGGLE_EDIT_BOOK_MODAL,
+  ADDING_OR_EDITING_BOOK,
+  SHOW_NOTIFICATION
 } from './catalogActions'
 
 const initialState = () => ({
   books: [],
-  fetchinCatalog: false
+  fetchinCatalog: false,
+  editBookModalVisible: false,
+  addBookModalVisible: false,
+  addingOrEditingBook: false,
+  showNotification: false
 
 })
 const REDUCER_ACTIONS = {
@@ -34,6 +42,18 @@ const REDUCER_ACTIONS = {
   },
   [FETCHING_CATALOG]: (state, value)=>{
     state.fetchinCatalog = value
+  },
+  [TOGGLE_EDIT_BOOK_MODAL]: (state, value)=>{
+    state.editBookModalVisible = value
+  },
+  [TOGGLE_ADD_BOOK_MODAL]: (state, value)=>{
+    state.addBookModalVisible = value
+  },
+  [ADDING_OR_EDITING_BOOK]: (state, value)=>{
+    state.addingOrEditingBook = value
+  },
+  [SHOW_NOTIFICATION]: (state, value)=>{
+    state.showNotification = value
   }
 }
 export default function (state = initialState(), action) {

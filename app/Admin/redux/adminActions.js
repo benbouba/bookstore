@@ -3,11 +3,15 @@ import RestService, {bookstoreUsers} from "../../RestServices"
 //Types
 export const GET_ALL_USERS = 'GET_ALL_USERS'
 export const UPDATE_ORDER_STATUS = 'UPDATE_ORDER_STATUS'
-
+export const FETCHING_ALL_USERS = 'FETCHING_ALL_USERS' 
 /**
  * Get all users and fetch all user orders
  */
 export const getAllUsers =()=>async(dispatch)=>{
+    dispatch({
+        type: FETCHING_ALL_USERS,
+        payload: true
+    })
     let users = await RestService('GET', {}, 'bookstore-users')
     let orders = {}
     if(!users){
@@ -30,6 +34,10 @@ export const getAllUsers =()=>async(dispatch)=>{
     dispatch({
         type: GET_ALL_USERS,
         payload: {users, orders}
+    })
+    dispatch({
+        type: FETCHING_ALL_USERS,
+        payload: false
     })
 }
 

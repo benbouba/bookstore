@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid} from '@material-ui/core'
+import { Snackbar, Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { ShoppingCart, Delete} from '@material-ui/icons';
-import Skeleton from '@material-ui/lab/Skeleton';
+import {Skeleton, Alert, AlertTitle} from '@material-ui/lab';
 
 //Action creators
 import { connect } from 'react-redux'
@@ -11,12 +11,14 @@ import {withRouter} from 'react-router-dom'
 
 //Actions
 import { addBookToOrder } from '../../Client/redux/clientActions'
-import { removeBookFromCatalog} from '../../Catalog/redux/catalogActions'
+import { removeBookFromCatalog, toggleEditBookModal, toggleAddBookModal, toggleShowNotification} from '../redux/catalogActions'
 
 //Custom components
 import BookCard from './BookCard';
 import CustomModal from './BookCoverModal';
 import AddOrEditBookForm from './AddOrEditBookForm'
+import TitleComponent from '../../SharedComponents/TitleComponent';
+import LoadingComponent from '../../SharedComponents/LoadingComponent'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,13 +59,13 @@ const useStyles = makeStyles((theme) => ({
  * @param {*} book 
  * @param {*} props 
  */
-export const renderButtons=(book, props)=> {
+export const renderButtons=(book, props, showModalFunction)=> {
   return props.history.location.pathname.includes('admin') ? (
   <React.Fragment>
     <Button size="small" color="primary">
                 View
               </Button>
-              <Button size="small" color="primary">
+              <Button size="small" color="primary" onClick={()=>showModalFunction(book)}>
                 Edit
               </Button>
               <IconButton aria-label="add" 
@@ -84,8 +86,7 @@ function CatalogComponent(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false)
   const [currentBook, setCurrentBook] = React.useState(null)
-  const [openAddBookModal, setOpenAddBookModal] = React.useState(false)
-
+  const {currentUserData} = props.user
   const handleOpen = (book) => {
     setCurrentBook(book)
     setOpen(true)
@@ -94,35 +95,29 @@ function CatalogComponent(props) {
     setCurrentBook(null)
     setOpen(false);
   }
-  const handleOpenAddBookModal =()=>{
-    setOpenAddBookModal(true)
+  const handleOpenEditBookModal =(book)=>{
+    setCurrentBook(book)
+    props.toggleEditBookModal(true)
   }
-  const handleCloseAddBookModal =()=>{
-    setOpenAddBookModal(false)
+  const handleCloseEditBookModal =()=>{
+    setCurrentBook(null)
+    props.toggleEditBookModal(false)
   }
-  return props.catalog.fetchinCatalog ?(
-    <main className={classes.root}>
-      <Skeleton />
-      <Skeleton animation={false} />
-      <Skeleton animation="wave" />
-    </main>
-    ): (
-    <React.Fragment>
+  return props.catalog.fetchinCatalog ? (
+        <LoadingComponent />): (
+    <div>
       <CssBaseline />
       <main>
-        {/* Hero unit */}
-        <div className={classes.heroContent}>
-          <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Catalog
-            </Typography>
-            <Button variant="contained" color="primary" onClick={handleOpenAddBookModal}>Add New Book</Button>
-          </Container>
-        </div>
+        <TitleComponent title='Catalog'>
+        {(currentUserData && currentUserData.role && currentUserData.role === 'admin') &&
+          <Typography align="center" gutterBottom>
+            <Button variant="contained" color="primary" onClick={()=>props.toggleAddBookModal(true)}>Add New Book</Button>
+          </Typography>}
+        </TitleComponent>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {props.books.map((book) => (
+            {props.catalog.books.map((book) => (
               <Grid item key={book.bookID} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -140,7 +135,7 @@ function CatalogComponent(props) {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    {renderButtons(book, props)}
+                    {renderButtons(book, props, handleOpenEditBookModal)}
                   </CardActions>
                 </Card>
               </Grid>
@@ -151,15 +146,30 @@ function CatalogComponent(props) {
       <CustomModal open={open} handleClose={handleClose}>
         <BookCard book={currentBook}/>
       </CustomModal>
-      <CustomModal open={openAddBookModal} handleClose={handleCloseAddBookModal}>
+      <CustomModal open={props.catalog.addBookModalVisible} handleClose={()=>props.toggleAddBookModal(false)}>
         <AddOrEditBookForm />
       </CustomModal>
-    </React.Fragment>
+      <CustomModal open={props.catalog.editBookModalVisible} handleClose={handleCloseEditBookModal}>
+        <AddOrEditBookForm book={currentBook}/>
+      </CustomModal>
+      <Snackbar 
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={props.catalog.showNotification} autoHideDuration={4000} onClose={()=>props.toggleShowNotification(false)}>
+        <Alert severity="success">
+          <AlertTitle>Success</AlertTitle>
+          Catalog has been updated successfully!
+        </Alert>
+      </Snackbar>
+    </div>
   )
 }
 // ==================================================================================================
 const mapStateToProps = state => ({
   catalog: state.catalog,
+  user: state.user
  })
  
  // ==================================================================================================
@@ -167,7 +177,10 @@ const mapStateToProps = state => ({
    return {
      ...bindActionCreators({
       addBookToOrder,
-      removeBookFromCatalog
+      removeBookFromCatalog,
+      toggleEditBookModal,
+      toggleAddBookModal,
+      toggleShowNotification
      }, dispatch),
      dispatch
    }
