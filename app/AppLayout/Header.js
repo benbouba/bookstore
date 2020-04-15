@@ -48,9 +48,7 @@ export const getBadgeCount = (orders, flag) => {
     Object.values(orders).forEach((order) => {
       if (order.orderStatus == 'open') {
         if (flag === 'allBooks') {
-          order.books.forEach((book) => {
-            count += book.quantity
-          })
+            count += order.books.length
         } else {
           count += 1
         }
@@ -87,7 +85,7 @@ function Header(props) {
               onClick={() => props.history.push("/client/orders")}
             >
               <Badge
-                badgeContent={getBadgeCount(client.orders, 'orders')}
+                badgeContent={getBadgeCount(client.orders, 'allBooks',)}
                 color="error"
               >
                 <ShoppingCart />

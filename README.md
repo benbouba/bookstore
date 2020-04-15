@@ -26,3 +26,15 @@ You can also run:
 
 ### `npm run lint`
 This script will run through the code and fix any lint issues
+
+## Login credentials
+
+### Admin user
+    - Username: `admin 001`
+    - Password: `admin`
+### Client users(in respective order)
+    - Usernames: [`client001`, `client002`]
+    - Passwords:  [`client1`,    `client2']
+
+## Hosted app
+Go to [https://book-shago.herokuapp.com/](https://book-shago.herokuapp.com/)
