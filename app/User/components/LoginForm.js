@@ -1,13 +1,19 @@
 import React from 'react'
-import {Avatar, 
-  Button, CssBaseline, 
-  TextField, FormControlLabel, 
-  Checkbox, Link, Paper, 
-  Box, Grid, 
-  Typography } from '@material-ui/core';
-import {LockOutlined} from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles';
-
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Paper,
+  Box,
+  Grid,
+  Typography,
+} from '@material-ui/core'
+import { LockOutlined } from "@material-ui/icons"
+import { makeStyles } from '@material-ui/core/styles'
 
 function Copyright() {
   return (
@@ -15,11 +21,10 @@ function Copyright() {
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      </Link>{" "}
+      {new Date().getFullYear()}.
     </Typography>
-  );
+  )
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+      theme.palette.type === 'light'
+        ? theme.palette.grey[50]
+        : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -51,13 +58,13 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 /**
- * Login form 
- * @param {*} props 
+ * Login form
+ * @param {*} props
  */
-const LoginPage = (props)=> {
-  const classes = useStyles();
+const LoginPage = (props) => {
+  const classes = useStyles()
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -114,7 +121,7 @@ const LoginPage = (props)=> {
               </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>
@@ -125,6 +132,6 @@ const LoginPage = (props)=> {
         </div>
       </Grid>
     </Grid>
-  );
+  )
 }
 export default LoginPage

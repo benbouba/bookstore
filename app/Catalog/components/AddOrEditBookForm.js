@@ -6,7 +6,7 @@ import { Typography, TextField, Button, CircularProgress} from '@material-ui/cor
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import {addBook, editBookProperty, toggleEditBookModal, toggleAddBookModal, toggleShowNotification} from '../redux/catalogActions'
+import {addBookToCatalog, editBookProperty, toggleEditBookModal, toggleAddBookModal, toggleShowNotification} from '../redux/catalogActions'
 
 
 class AddOrEditBookForm extends React.Component {
@@ -44,7 +44,7 @@ class AddOrEditBookForm extends React.Component {
           await this.props.editBookProperty(bookID, newBookData)
           this.props.toggleEditBookModal(false)
         }else{
-          await this.props.addBook(newBookData)
+          await this.props.addBookToCatalog(newBookData)
           this.props.toggleAddBookModal(false)
         }
         this.props.toggleShowNotification(true)
@@ -128,7 +128,7 @@ const mapStateToProps = state => ({
    function mapDispatchToProps (dispatch) {
      return {
        ...bindActionCreators({
-        addBook,
+        addBookToCatalog,
         editBookProperty,
         toggleEditBookModal,
         toggleAddBookModal,

@@ -1,24 +1,26 @@
-import React from 'react';
-import { Snackbar, Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid} from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
-import { ShoppingCart, Delete} from '@material-ui/icons';
-import {Skeleton, Alert, AlertTitle} from '@material-ui/lab';
+import React from "react"
+import {
+ Snackbar, Card, CardActions, CardContent, CardMedia, CssBaseline, Button, IconButton, Typography, Container, Grid } from '@material-ui/core'
+import { makeStyles } from "@material-ui/core/styles"
+import { ShoppingCart, Delete } from '@material-ui/icons';
+import { Skeleton, Alert, AlertTitle } from '@material-ui/lab';
 
-//Action creators
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import {withRouter} from 'react-router-dom'
+// Action creators
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+import { withRouter } from 'react-router-dom'
 
-//Actions
-import { addBookToOrder } from '../../Client/redux/clientActions'
-import { removeBookFromCatalog, toggleEditBookModal, toggleAddBookModal, toggleShowNotification} from '../redux/catalogActions'
+// Actions
+import { addBookToOrder } from "../../Client/redux/clientActions"
+import {
+ removeBookFromCatalog, toggleEditBookModal, toggleAddBookModal, toggleShowNotification } from '../redux/catalogActions'
 
-//Custom components
-import BookCard from './BookCard';
-import CustomModal from '../../SharedComponents/CustomModal';
-import AddOrEditBookForm from './AddOrEditBookForm'
-import TitleComponent from '../../SharedComponents/TitleComponent';
-import LoadingComponent from '../../SharedComponents/LoadingComponent'
+// Custom components
+import BookCard from "./BookCard"
+import CustomModal from "../../SharedComponents/CustomModal"
+import AddOrEditBookForm from "./AddOrEditBookForm"
+import TitleComponent from "../../SharedComponents/TitleComponent"
+import LoadingComponent from "../../SharedComponents/LoadingComponent"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(8),
   },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   cardMedia: {
-    paddingTop: '100%', 
+    paddingTop: "100%",
   },
   cardContent: {
     flexGrow: 1,
@@ -56,11 +58,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 /**
  * Render action buttons depending on the user
- * @param {*} book 
- * @param {*} props 
+ * @param {*} book
+ * @param {*} props
  */
-export const renderButtons=(book, props, showModalFunction)=> {
-  return props.history.location.pathname.includes('admin') ? (
+export const renderButtons = (book, props, showModalFunction) => props.history.location.pathname.includes('admin') ? (
   <React.Fragment>
     <Button size="small" color="primary" onClick={()=>props.history.push(`/admin/catalog/${book.bookID}`)}>
       View
@@ -80,39 +81,46 @@ export const renderButtons=(book, props, showModalFunction)=> {
       <ShoppingCart />
     </IconButton>
 </React.Fragment>
-)}
+)
 
 function CatalogComponent(props) {
-  const classes = useStyles();
+  const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const [currentBook, setCurrentBook] = React.useState(null)
-  const {currentUserData} = props.user
+  const { currentUserData } = props.user
   const handleOpen = (book) => {
     setCurrentBook(book)
     setOpen(true)
-  };
+  }
   const handleClose = () => {
     setCurrentBook(null)
-    setOpen(false);
+    setOpen(false)
   }
-  const handleOpenEditBookModal =(book)=>{
+  const handleOpenEditBookModal = (book) => {
     setCurrentBook(book)
     props.toggleEditBookModal(true)
   }
-  const handleCloseEditBookModal =()=>{
+  const handleCloseEditBookModal = () => {
     setCurrentBook(null)
     props.toggleEditBookModal(false)
   }
   return props.catalog.fetchinCatalog ? (
-        <LoadingComponent />): (
-    <div>
+    <LoadingComponent />) : (
+          <div>
       <CssBaseline />
       <main>
-        <TitleComponent title='Catalog'>
-        {(currentUserData && currentUserData.role && currentUserData.role === 'admin') &&
-          <Typography align="center" gutterBottom>
-            <Button variant="contained" color="primary" onClick={()=>props.toggleAddBookModal(true)}>Add New Book</Button>
-          </Typography>}
+        <TitleComponent title="Catalog">
+          {(currentUserData && currentUserData.role && currentUserData.role === 'admin')
+          && <Typography align="center" gutterBottom>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => props.toggleAddBookModal(true)}
+                >
+                  Add New Book
+                </Button>
+              </Typography>
+            }
         </TitleComponent>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
@@ -124,14 +132,19 @@ function CatalogComponent(props) {
                     className={classes.cardMedia}
                     image={book.bookCover}
                     title={book.title}
-                    onClick={()=>handleOpen(book)}
+                    onClick={() => handleOpen(book)}
                   />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
                       {book.title}
                     </Typography>
                     <Typography>
-                      This book was written by {book.author} and was first published on {book.publicationDate}
+                      This book was written by 
+{' '}
+{book.author} and was first
+                      published on 
+{' '}
+{book.publicationDate}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -144,20 +157,28 @@ function CatalogComponent(props) {
         </Container>
       </main>
       <CustomModal open={open} handleClose={handleClose}>
-        <BookCard book={currentBook}/>
+        <BookCard book={currentBook} />
       </CustomModal>
-      <CustomModal open={props.catalog.addBookModalVisible} handleClose={()=>props.toggleAddBookModal(false)}>
+      <CustomModal
+        open={props.catalog.addBookModalVisible}
+        handleClose={() => props.toggleAddBookModal(false)}
+      >
         <AddOrEditBookForm />
       </CustomModal>
-      <CustomModal open={props.catalog.editBookModalVisible} handleClose={handleCloseEditBookModal}>
-        <AddOrEditBookForm book={currentBook}/>
+      <CustomModal
+        open={props.catalog.editBookModalVisible}
+        handleClose={handleCloseEditBookModal}
+      >
+        <AddOrEditBookForm book={currentBook} />
       </CustomModal>
-      <Snackbar 
+      <Snackbar
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
-        open={props.catalog.showNotification} autoHideDuration={4000} onClose={()=>props.toggleShowNotification(false)}>
+        open={props.catalog.showNotification}
+autoHideDuration={4000}
+onClose={()=>props.toggleShowNotification(false)}>
         <Alert severity="success">
           <AlertTitle>Success</AlertTitle>
           Catalog has been updated successfully!
@@ -167,23 +188,23 @@ function CatalogComponent(props) {
   )
 }
 // ==================================================================================================
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   catalog: state.catalog,
-  user: state.user
- })
- 
- // ==================================================================================================
- function mapDispatchToProps (dispatch) {
-   return {
-     ...bindActionCreators({
-      addBookToOrder,
-      removeBookFromCatalog,
-      toggleEditBookModal,
-      toggleAddBookModal,
-      toggleShowNotification
-     }, dispatch),
-     dispatch
-   }
- }
- 
- export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CatalogComponent))
+  user: state.user,
+})
+
+// ==================================================================================================
+function mapDispatchToProps(dispatch) {
+  return {
+    ...bindActionCreators({
+        addBookToOrder,
+        removeBookFromCatalog,
+        toggleEditBookModal,
+        toggleAddBookModal,
+        toggleShowNotification,
+    }, dispatch),
+    dispatch,
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CatalogComponent))

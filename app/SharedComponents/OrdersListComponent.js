@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
   changeQuantity,
-  removeBook,
+  removeBookFromCart,
   confirmPay,
   cancelOrder} from '../Client/redux/clientActions'
 import { updateOrderStatus} from '../Admin/redux/adminActions'  
@@ -91,7 +91,7 @@ renderEditableQuantity(book, order){
                             </ListItemAvatar>
                             <ListItemText primary={book.title} secondary={this.renderEditableQuantity(book, order)} />
                             <ListItemSecondaryAction>
-                              {(this.isEditable(order.orderStatus) && !this.isAdmin()) && <IconButton edge="end" aria-label="delete" onClick={async()=>await this.props.removeBook(order.orderID, book.bookID)}>
+                              {(this.isEditable(order.orderStatus) && !this.isAdmin()) && <IconButton edge="end" aria-label="delete" onClick={async()=>await this.props.removeBookFromCart(order.orderID, book.bookID)}>
                                 <Delete/>
                               </IconButton>}
                             </ListItemSecondaryAction>
@@ -144,7 +144,7 @@ const mapStateToProps = state => ({
     return {
       ...bindActionCreators({
         changeQuantity,
-        removeBook,
+        removeBookFromCart,
         confirmPay,
         cancelOrder,
         updateOrderStatus
