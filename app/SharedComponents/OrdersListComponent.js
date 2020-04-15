@@ -7,9 +7,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
   changeQuantity,
-  removeBook,
+  removeBookFromCart,
   confirmPay,
   cancelOrder} from '../Client/redux/clientActions'
+import { updateOrderStatus} from '../Admin/redux/adminActions'  
 
 /**
  * Component for listing orders for both client and admin
@@ -59,10 +60,10 @@ renderEditableQuantity(book, order){
 
   isActive =(orderStatus)=> orderStatus === 'paid' || orderStatus === 'open'
   isEditable = (orderStatus)=>orderStatus === 'open'
-  isAdmin =()=> this.props.user.currentUserData.role && this.props.user.currentUserData.role === 'admin'
+  isAdmin =()=> this.props.user.currentUserData && this.props.user.currentUserData.role && this.props.user.currentUserData.role === 'admin'
     render() {
       //Passed as props from the component parent
-      const orders = this.props.orders
+      const {orders, owner} = this.props
         return(
           <List >
               {/* Order */}
@@ -90,7 +91,7 @@ renderEditableQuantity(book, order){
                             </ListItemAvatar>
                             <ListItemText primary={book.title} secondary={this.renderEditableQuantity(book, order)} />
                             <ListItemSecondaryAction>
-                              {this.isEditable(order.orderStatus) && <IconButton edge="end" aria-label="delete" onClick={async()=>await this.props.removeBook(order.orderID, book.bookID)}>
+                              {(this.isEditable(order.orderStatus) && !this.isAdmin()) && <IconButton edge="end" aria-label="delete" onClick={async()=>await this.props.removeBookFromCart(order.orderID, book.bookID)}>
                                 <Delete/>
                               </IconButton>}
                             </ListItemSecondaryAction>
@@ -106,7 +107,7 @@ renderEditableQuantity(book, order){
                   <ExpansionPanelActions>
 
                       {/* Client Actions */}
-                  {(this.isActive(order.orderStatus) && !this.isAdmin()) ? 
+                  {(this.isActive(order.orderStatus) && !this.isAdmin()) &&
                     <React.Fragment>
                       {this.isEditable(order.orderStatus) && 
                       <React.Fragment>
@@ -114,15 +115,14 @@ renderEditableQuantity(book, order){
                         <Button variant="contained" color="primary" onClick={async()=> await this.props.confirmPay(order.orderID)}>Make payment</Button>
                       </React.Fragment>}
                       {!this.isEditable(order.orderStatus) && <Typography >Waiting delivery confirmation</Typography>}
-                     </React.Fragment> : 
-                    <Typography >{order.orderStatus}</Typography>}
+                     </React.Fragment> }
                     {/* End of Client Actions */}
 
                     {/* Admin Actions */}
-                    {this.isAdmin() && <React.Fragement>
-                      {order.orderStatus === 'paid' &&<Button variant="contained" color="primary" onClick={async()=> await this.props.cancelOrder(order.orderID)}>Cancel Order</Button>}
-                      {order.orderStatus === 'open' && <Button variant="contained" color="primary" onClick={async()=> await this.props.confirmPay(order.orderID)}>Confirm Delivery</Button>}
-                      </React.Fragement>}
+                    {this.isAdmin() && <React.Fragment>
+                      {this.isEditable(order.orderStatus) &&<Button variant="contained" color="primary" onClick={async()=> await this.props.updateOrderStatus(order.orderID, owner.userID, 'cancelled')}>Cancel Order</Button>}
+                      {order.orderStatus === 'paid' && <Button variant="contained" color="primary" onClick={async()=> await this.props.updateOrderStatus(order.orderID, owner.userID, 'sent')}>Confirm Delivery</Button>}
+                      </React.Fragment>}
                      {/* End of Admin Actions  */}
                   </ExpansionPanelActions>
                 </ExpansionPanel>
@@ -144,9 +144,10 @@ const mapStateToProps = state => ({
     return {
       ...bindActionCreators({
         changeQuantity,
-        removeBook,
+        removeBookFromCart,
         confirmPay,
-        cancelOrder
+        cancelOrder,
+        updateOrderStatus
       }, dispatch),
       dispatch
     }

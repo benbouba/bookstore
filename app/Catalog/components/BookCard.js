@@ -1,14 +1,20 @@
-import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {Card , CardContent, CardMedia, IconButton, Typography} from '@material-ui/core';
-import { ShoppingCart} from '@material-ui/icons';
+import React from 'react'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Typography,
+} from '@material-ui/core'
+import { ShoppingCart } from "@material-ui/icons"
 
 // Action creators
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-//Actions 
-import {addBookToOrder} from '../../Client/redux/clientActions'
+// Actions
+import { addBookToOrder } from "../../Client/redux/clientActions"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,20 +41,20 @@ const useStyles = makeStyles((theme) => ({
     height: 38,
     width: 38,
   },
-}));
+}))
 /**
  * Card component for displaying book data
- * @param {*} props 
+ * @param {*} props
  */
 function BookCard(props) {
-  const classes = useStyles();
-  const {book} =props
+  const classes = useStyles()
+  const { book } = props
   return (
     <Card className={classes.root}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
-           {book.title}
+            {book.title}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
             {book.author}
@@ -56,7 +62,14 @@ function BookCard(props) {
         </CardContent>
         <div className={classes.controls}>
           <IconButton aria-label="add">
-            <ShoppingCart onClick={async()=>await props.addBookToOrder(boo.bookID, book.title, book.bookCover)} className={classes.playIcon} />
+            <ShoppingCart
+              onClick={async () => await props.addBookToOrder(
+                  boo.bookID,
+                  book.title,
+                  book.bookCover,
+                )}
+              className={classes.playIcon}
+            />
           </IconButton>
         </div>
       </div>
@@ -66,21 +79,21 @@ function BookCard(props) {
         title={book.title}
       />
     </Card>
-  );
+  )
 }
 // ==================================================================================================
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   user: state.user,
-  client: state.client
+  client: state.client,
 })
 
 // ==================================================================================================
 
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
-    ...bindActionCreators({addBookToOrder}, dispatch),
-    dispatch
+    ...bindActionCreators({ addBookToOrder }, dispatch),
+    dispatch,
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(BookCard)

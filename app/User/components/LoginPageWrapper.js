@@ -7,6 +7,8 @@ import { bindActionCreators } from 'redux'
 
 //Actions
 import {getCurrentLoggedInUser, loginUser} from '../redux/userActions'
+import {getAllUsers} from '../../Admin/redux/adminActions'
+import {getOrders} from '../../Client/redux/clientActions'
 
 //Custom componets
 import LoginForm from './LoginForm'
@@ -21,9 +23,10 @@ class LoginPageWrapper extends React.Component {
     await this.props.getCurrentLoggedInUser()
     if(this.props.user.currentUserData){
       if (this.props.user.currentUserData.role === 'admin') {
-        this.props.history.push(`/admin/home`)
+        this.props.history.push(`/admin/catalog`)
+        await this.props.getAllUsers()
       }else{
-        this.props.history.push(`/client/home`)
+        this.props.history.push(`/client/catalog`)
       }
     }
   }
@@ -35,9 +38,11 @@ class LoginPageWrapper extends React.Component {
     const user = await this.props.loginUser(username.value, password.value)
     this.setState({loading: false})
     if (user.role === 'admin') {
-      this.props.history.push(`/admin/home`)
+      this.props.history.push(`/admin/catalog`)
+      await this.props.getAllUsers()
     }else{
-      this.props.history.push(`/client/home`)
+      this.props.history.push(`/client/catalog`)
+      await this.props.getOrders()
     }
   }
   
@@ -63,7 +68,9 @@ const mapStateToProps = state => ({
      return {
        ...bindActionCreators({
         getCurrentLoggedInUser,
-         loginUser
+         loginUser,
+         getAllUsers,
+         getOrders
        }, dispatch),
        dispatch
      }

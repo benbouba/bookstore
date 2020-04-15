@@ -2,13 +2,12 @@ import {
   USER_SAYS_HELLO,
   LOGIN_USER,
   LOGOUT_USER,
-  TOGGLE_DRAWER
+  TOGGLE_DRAWER,
 } from './userActions'
 
 const initialState = () => ({
   currentUserData: null,
-  drawerOpen: false
-
+  drawerOpen: false,
 })
 
 const REDUCER_ACTIONS = {
@@ -22,14 +21,13 @@ const REDUCER_ACTIONS = {
     state.currentUserData = null
   },
   [TOGGLE_DRAWER]: (state) => {
-    console.log('Closing')
     state.drawerOpen = !state.drawerOpen
-  }
+  },
 }
 
 export default function (state = initialState(), action) {
   state = {
-    ...state
+    ...state,
   }
   const handler = REDUCER_ACTIONS[action.type]
   if (handler) {

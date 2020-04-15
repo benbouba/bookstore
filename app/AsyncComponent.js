@@ -1,29 +1,33 @@
 import React, { Component } from 'react'
 
-export default function asyncComponent (importComponent) {
+export default function asyncComponent(importComponent) {
   class AsyncComponent extends Component {
-    constructor (props) {
+    constructor(props) {
       super(props)
       this.state = {
-        component: null
+        component: null,
       }
     }
 
-    async componentDidMount () {
-      try {  
+    async componentDidMount() {
+      try {
         const { default: component } = await importComponent()
         this.setState({
-          component
+          component,
         })
       } catch (e) {
         console.error('AsyncComponent error', e)
         this.setState({
-          component: <div><h1>Access denied</h1></div>
+          component: (
+            <div>
+              <h1>Access denied</h1>
+            </div>
+          ),
         })
       }
     }
 
-    render () {
+    render() {
       const Component = this.state.component
       return Component ? <Component {...this.props} /> : null
     }

@@ -1,5 +1,5 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: ['babel-polyfill', './app/index.js'],
@@ -13,34 +13,30 @@ module.exports = {
       {
         test: [/\.js$/],
         enforce: "pre",
-        exclude: /node_modules/, 
+        exclude: /node_modules/,
         use: [
-                { loader: "babel-loader" , 
-                options: {
-                    presets: [
-                        "@babel/preset-env",
-                        "@babel/preset-react"
-                    ],
-                    plugins: [
-                        "@babel/plugin-syntax-dynamic-import",
-                        "@babel/plugin-proposal-class-properties"
-                    ]
-                  }
-          
-                },
-              
-              ]
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ["@babel/preset-env", "@babel/preset-react"],
+              plugins: [
+                '@babel/plugin-syntax-dynamic-import',
+                '@babel/plugin-proposal-class-properties',
+              ],
             },
+          },
+        ],
+      },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
-    ]
+    ],
   },
   mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'app/index.html'
+      template: 'app/index.html',
     }),
   ],
   devServer: {
@@ -57,6 +53,4 @@ module.exports = {
       },
     },
   },
-
-
 }
